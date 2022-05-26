@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.kh.ex01.mappers.board">
+	
+	<!-- 글 등록 -->
+	<insert id="create">
+		insert into tbl_board
+			(bno, title, content, writer, re_group)
+		values
+			(seq_board_bno.nextval, #{title}, #{content, jdbcType=VARCHAR}, #{writer}, seq_board_bno.nextval)
+	</insert>
+	
+	<!-- 글 조회 (1개)-->
+	<select id="read" resultType="BoardVo">
+		select * from tbl_board
+		where bno = #{bno}
+	</select>
+	
+	<update id="update">
+		update tbl_board set
+			title = #{title},
+			content = #{content, jdbcType=VARCHAR},
+			writer = #{writer}
+		where bno = #{bno}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="delete">
+		delete from tbl_board
+		where bno = #{bno}
+	</delete>
+	
+	<!-- 글 목록 -->
+	<select id="list" resultType="BoardVo">
+		select * from
+			(select rownum rnum, a.* from
+				(select * from tbl_board
+				<include refid="search"></include>
+				 order by re_group desc, re_seq asc) a)
+		where rnum between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- 답글 쓰기 -->
+	<select id="insertReply">
+		insert into tbl_board
+			(bno, title, content, writer, re_group, re_level, re_seq)
+		values
+			(seq_board_bno.nextval, #{title}, #{content}, #{writer}, #{re_group}, #{re_level} + 1, #{re_seq} + 1)
+	</select>
+
+	<!-- 답글 순서 -->
+	<update id="updateReSeq">
+		<![CDATA[
+			update tbl_board set
+				re_seq = re_seq + 1
+			where re_group = #{re_group}
+			and re_seq > #{re_seq}
+		]]>
+	</update>
+	
+	<!-- 글 갯수 구하기 -->
+	<select id="getCount" resultType="int">
+		select count(*) from tbl_board
+		<include refid="search"></include>
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateViewCnt">
+		update tbl_board set
+			viewcnt = viewcnt + 1
+		where bno = #{bno}
+	</update>
+	
+	<!-- 검색조건 -->
+	<sql id="search">
+		<if test="searchType != null and keyword != null">
+			<choose>
+				<when test='searchType == "t"'>
+					where title like '%' || #{keyword} || '%'
+				</when>
+				<when test='searchType == "c"'>
+					where content like '%' || #{keyword} || '%'
+				</when>
+				<when test='searchType == "w"'>
+					where writer like '%' || #{keyword} || '%'
+				</when>
+				<when test='searchType == "tc"'>
+					where title like '%' || #{keyword} || '%'
+					or
+					where content like '%' || #{keyword} || '%'
+				</when>
+				<when test='searchType == "tcw"'>
+					where title like '%' || #{keyword} || '%'
+					or
+					where content like '%' || #{keyword} || '%'
+					or
+					where writer like '%' || #{keyword} || '%'
+				</when>
+			</choose>
+		</if>
+	</sql>
+	
+</mapper>
