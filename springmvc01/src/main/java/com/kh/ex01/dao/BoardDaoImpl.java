@@ -1,6 +1,8 @@
 package com.kh.ex01.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,21 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public void updateViewCnt(int bno) {
 		sqlSession.update(NAMESPACE + "updateViewCnt", bno);
+		
+	}
+
+	@Override
+	public int getNextBno() {
+		int bno = sqlSession.selectOne(NAMESPACE + "getNextBno");
+		return bno;
+	}
+
+	@Override
+	public void insertAttach(String filename, int bno) {
+		Map<String, Object> parameter = new HashMap<String, Object>();
+		parameter.put("filename", filename);
+		parameter.put("bno", bno);
+		sqlSession.insert(NAMESPACE + "insertAttach", parameter);
 		
 	}
 

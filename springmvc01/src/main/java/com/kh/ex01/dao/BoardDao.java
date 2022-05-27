@@ -33,4 +33,9 @@ public interface BoardDao {
 	
 	// 조회수 증가
 	public void updateViewCnt(int bno);
+	
+	public int getNextBno();
+	
+	public void insertAttach(String filename, int bno);
+	
 }

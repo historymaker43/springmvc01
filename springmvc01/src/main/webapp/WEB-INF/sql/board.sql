@@ -13,3 +13,9 @@ update tbl_board set
 re_group = bno;
 
 commit;
+
+-- 첨부파일 테이블
+create table tbl_attach(
+    filename varchar2(50) primary key,
+    bno number references tbl_board(bno)
+);

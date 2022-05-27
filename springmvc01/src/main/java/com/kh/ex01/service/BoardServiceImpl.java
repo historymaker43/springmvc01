@@ -17,8 +17,18 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDao boardDao;
 	
 	@Override
+	@Transactional
 	public boolean create(BoardVo boardVo) {
-		boolean result = boardDao.create(boardVo);
+		int bno = boardDao.getNextBno();
+		boardVo.setBno(bno);
+		System.out.println("boardVo : " + boardVo);
+		boolean result = boardDao.create(boardVo); // tbl_board
+		String[] files = boardVo.getFiles();
+		if (files != null && files.length != 0) {
+			for (String filename : files) {
+				boardDao.insertAttach(filename, bno); // tbl_attach
+			}
+		}
 		return result;
 	}
 

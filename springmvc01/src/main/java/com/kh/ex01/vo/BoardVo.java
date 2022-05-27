@@ -1,6 +1,7 @@
 package com.kh.ex01.vo;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 public class BoardVo {
 	private int bno;
@@ -12,6 +13,7 @@ public class BoardVo {
 	private int re_group;
 	private int re_level;
 	private int re_seq;
+	private String[] files;
 
 	public BoardVo(int bno, String title, String content, String writer, Date regdate, int viewcnt, int re_group,
 			int re_level, int re_seq) {
@@ -25,6 +27,14 @@ public class BoardVo {
 		this.re_group = re_group;
 		this.re_level = re_level;
 		this.re_seq = re_seq;
+	}
+
+	public String[] getFiles() {
+		return files;
+	}
+
+	public void setFiles(String[] files) {
+		this.files = files;
 	}
 
 	public int getRe_level() {
@@ -128,7 +138,7 @@ public class BoardVo {
 	public String toString() {
 		return "BoardVo [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer + ", regdate="
 				+ regdate + ", viewcnt=" + viewcnt + ", re_group=" + re_group + ", re_level=" + re_level + ", re_seq="
-				+ re_seq + "]";
+				+ re_seq + ", files=" + Arrays.toString(files) + "]";
 	}
 
 }

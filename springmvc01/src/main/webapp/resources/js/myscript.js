@@ -14,7 +14,7 @@ function isImage(filename){
 			}
 		}
 		
-		function getFilename(path) {
-			var underIndex = path.indexOf("_");
-			return path.substring(underIndex + 1);
-		}
+function getFilename(path) {
+	var underIndex = path.indexOf("_");
+	return path.substring(underIndex + 1);
+}

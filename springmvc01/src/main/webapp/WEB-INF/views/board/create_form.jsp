@@ -21,53 +21,56 @@
 </style>
 <script src="/resources/js/myscript.js"></script>
 <script type="text/javascript">
-	$(function(){
-		$("#fileDrop").on("dragenter dragover drop", function(e){
-			e.preventDefault();
-// 			console.log(e);
-			var file = e.originalEvent.dataTransfer.files[0];
-			console.log(file);
-			// post, multipart/form-data
-			var formData = new FormData(); // <form></form>
-			formData.append("file", file); // <input type="file" name="file">
-			var url = "/board/uploadFile";
-			
-			// presessData - ?a=b&c=d 이렇게 보내지 않겠다.
-			// contentData - 텍스트 데이터
-			$.ajax({
-				"processData" 	: false,
-				"contentType" 	: false,
-				"url"		  	: url,
-				"method"		: "post",
-				"data"			: formData,
-				"success"		: function(rData){
-					var cloneDiv = $(".divUploaded").eq(0).clone();
-					var filename = getFilename(rData);
-					console.log("filename:" + filename);
-					cloneDiv.find("span").text(filename);
-					cloneDiv.attr("data-filename", rData);
-					if (isImage(filename)){
-						cloneDiv.find("img")
-							.attr("src", "/member/displayImage?filename=" + rData);
-					}
-					
-					cloneDiv.appendTo($("#uploadedList")).show();;
+$(function(){
+	$("#fileDrop").on("dragenter dragover" ,function (e) {
+		e.preventDefault();
+	});
+	$("#fileDrop").on("drop", function(e){
+		e.preventDefault();
+			// console.log(e);
+		var file = e.originalEvent.dataTransfer.files[0];
+		console.log(file);
+		// post, multipart/form-data
+		var formData = new FormData(); // <form></form>
+		formData.append("file", file); // <input type="file" name="file">
+		var url = "/board/uploadFile";
+		
+		// presessData - ?a=b&c=d 이렇게 보내지 않겠다.
+		// contentData - 텍스트 데이터
+		$.ajax({
+			"processData" 	: false,
+			"contentType" 	: false,
+			"url"		  	: url,
+			"method"		: "post",
+			"data"			: formData,
+			"success"		: function(rData){
+				var cloneDiv = $(".divUploaded").eq(0).clone();
+				var filename = getFilename(rData);
+				console.log("filename:" + filename);
+				cloneDiv.find("span").text(filename);
+				cloneDiv.attr("data-filename", rData);
+				if (isImage(filename)) {
+					cloneDiv.find("img")
+						.attr("src", "/member/displayImage?filename=" + rData);
 				}
-			});
-			
+				
+				cloneDiv.appendTo($("#uploadedList")).show();
+			}
 		});
 		
-		$("#frmCreate").submit(function(){
-			var divs = $("#uploadedList > .divUploaded");
-			divs.each(function(i){
-				var filename = $(this).attr("data-filename");
-				var inputHtml = "<input type='hidden' name='files[" + i + "]' value='" + filename + "'>";
-				$("#frmCreate").prepend(inputHtml);
-			});
-			return false;
-			
-		});
 	});
+	
+	$("#frmCreate").submit(function(){
+		var divs = $("#uploadedList > .divUploaded");
+		divs.each(function(){
+			var filename = $(this).attr("data-filename");
+			var inputHtml = "<input type='hidden' name='files' value='" + filename + "'>";
+			$("#frmCreate").prepend(inputHtml);
+		});
+// 		return false;
+		
+	});
+});
 </script>
 <div class="container-fluid">
 	<div class="row">

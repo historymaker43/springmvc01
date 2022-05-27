@@ -5,12 +5,23 @@
   
 <mapper namespace="com.kh.ex01.mappers.board">
 	
+	<!-- 글 번호 얻기 -->
+	<select id="getNextBno" resultType="int">
+		select seq_board_bno.nextval from dual
+	</select>
+	
+	<!-- 첨부파일 추가 -->
+	<insert id="insertAttach">
+		insert into tbl_attach(filename, bno)
+		values(#{filename}, #{bno})
+	</insert>
+	
 	<!-- 글 등록 -->
 	<insert id="create">
 		insert into tbl_board
 			(bno, title, content, writer, re_group)
 		values
-			(seq_board_bno.nextval, #{title}, #{content, jdbcType=VARCHAR}, #{writer}, seq_board_bno.nextval)
+			(#{bno}, #{title}, #{content, jdbcType=VARCHAR}, #{writer}, #{bno})
 	</insert>
 	
 	<!-- 글 조회 (1개)-->
