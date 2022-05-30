@@ -6,7 +6,7 @@
 <mapper namespace="com.kh.ex01.mappers.board">
 	
 	<!-- 글 번호 얻기 -->
-	<select id="getNextBno" resultType="int">
+	<select id="getNextArticleNo" resultType="int">
 		select seq_board_bno.nextval from dual
 	</select>
 	

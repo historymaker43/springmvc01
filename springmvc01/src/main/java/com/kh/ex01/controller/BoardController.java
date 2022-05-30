@@ -121,4 +121,13 @@ public class BoardController {
 		System.out.println("saveFilename : " + saveFilename);
 		return saveFilename;
 	}
+	
+	@RequestMapping(value = "/deleteFile", method = RequestMethod.GET)
+	@ResponseBody
+	public String deleteFile(String filename) {
+		boolean result = MyFileUploader.deleteFile(filename);
+		
+		return String.valueOf(result);
+	}
+	
 }

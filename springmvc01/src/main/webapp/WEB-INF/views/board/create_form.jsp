@@ -52,6 +52,7 @@ $(function(){
 				if (isImage(filename)) {
 					cloneDiv.find("img")
 						.attr("src", "/member/displayImage?filename=" + rData);
+					cloneDiv.find("a.a_delete").attr("data-filename", rData);
 				}
 				
 				cloneDiv.appendTo($("#uploadedList")).show();
@@ -69,6 +70,22 @@ $(function(){
 		});
 // 		return false;
 		
+	});
+	
+	$("#uploadedList").on("click", ".a_delete", function(e){
+		e.preventDefault();
+		var that = $(this);
+		var filename = that.attr("data-filename");
+		var url = "/board/deleteFile";
+		var sData = {
+				"filename" : filename
+		}
+		$.get(url, sData, function(rData){
+			console.log(rData);
+			if (rData == "true") {
+				that.parent().remove(); // <a> 를 감싸고 있는 <div> 제거
+			}
+		});
 	});
 });
 </script>
@@ -107,7 +124,7 @@ $(function(){
 						<div class="divUploaded" style="display: none;">
 							<img src="/resources/images/default.png" height="100"><br>
 							<span>default.png</span>
-							<a href="#">&times;</a>
+							<a class="a_delete" href="#">&times;</a>
 						</div>
 						
 						<!-- 업로드한 파일들 -->
